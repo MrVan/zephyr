@@ -16,7 +16,7 @@
  *
  * @return 0
  */
-static int mimx8mm_a53_init(struct device *arg)
+static int mimx8mm_a53_init(const struct device *arg)
 {
 
 	/* TODO */
