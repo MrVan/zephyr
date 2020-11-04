@@ -326,6 +326,12 @@ static void enable_mmu_el1(unsigned int flags)
 	ARG_UNUSED(flags);
 	uint64_t val;
 
+	/* Invalidate TLB */
+	__asm__ volatile("tlbi vmalle1is" : : : );
+
+	__DSB();
+	__ISB();
+
 	/* Set MAIR, TCR and TBBR registers */
 	__asm__ volatile("msr mair_el1, %0"
 			:
