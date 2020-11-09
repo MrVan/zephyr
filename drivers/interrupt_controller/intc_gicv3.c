@@ -12,7 +12,7 @@
 #include "intc_gicv3_priv.h"
 
 /* Redistributor base addresses for each core */
-mem_addr_t gic_rdists[GIC_NUM_CPU_IF];
+mem_addr_t gic_rdists[CONFIG_MP_NUM_CPUS];
 
 #ifdef CONFIG_ARMV8_A_NS
 #define IGROUPR_VAL	0xFFFFFFFFU
@@ -287,15 +287,17 @@ static void gicv3_dist_init(void)
 #endif
 }
 
-/* TODO: add arm_gic_secondary_init() for multicore support */
 int arm_gic_init(const struct device *unused)
 {
+	int i;
+
 	ARG_UNUSED(unused);
 
 	gicv3_dist_init();
 
 	/* Fixme: populate each redistributor */
-	gic_rdists[0] = GIC_RDIST_BASE;
+	for (i = 0; i < GIC_NUM_CPU_IF; i++)
+		gic_rdists[i] = GIC_RDIST_BASE + i * 0x20000;
 
 	gicv3_rdist_enable(GIC_GET_RDIST(GET_CPUID));
 
@@ -303,5 +305,18 @@ int arm_gic_init(const struct device *unused)
 
 	return 0;
 }
-
 SYS_INIT(arm_gic_init, PRE_KERNEL_1, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT);
+
+#ifdef CONFIG_SMP
+int arm_gic_secondary_init(void)
+{
+	if (!GET_CPUID)
+		return 0;
+
+	gicv3_rdist_enable(GIC_GET_RDIST(GET_CPUID));
+
+	gicv3_cpuif_init();
+
+	return 0;
+}
+#endif
