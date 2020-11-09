@@ -33,3 +33,13 @@ void z_arm64_prep_c(void)
 
 	CODE_UNREACHABLE;
 }
+
+#ifdef CONFIG_SMP
+extern void z_arm64_secondary_start();
+void z_arm64_secondary_prep_c(void)
+{
+	z_arm64_secondary_start();
+
+	CODE_UNREACHABLE;
+}
+#endif

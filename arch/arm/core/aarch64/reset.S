@@ -146,4 +146,20 @@ SECTION_SUBSEC_FUNC(TEXT,_reset_section,__start)
 	/* Enable the SError interrupt */
 	msr	daifclr, #(DAIFSET_ABT)
 
+#ifdef CONFIG_SMP
+	mrs     x0, mpidr_el1
+	/* FIMXME: aff3 not taken into consideration */
+	ubfx    x0, x0, #0, #24
+	cbnz    x0, L_enable_secondary
+#endif
+
 	bl	z_arm64_prep_c
+
+#ifdef CONFIG_SMP
+L_enable_secondary:
+	adr	x0, arm64_cpu_sp
+	ldr	x1, [x0]
+	mov	sp, x1
+
+	bl	z_arm64_secondary_prep_c
+#endif
