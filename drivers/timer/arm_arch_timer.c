@@ -133,3 +133,14 @@ void arch_busy_wait(uint32_t usec_to_wait)
 	}
 }
 #endif
+
+#ifdef CONFIG_SMP
+void smp_timer_init(void)
+{
+	/* set the initial status of timer0 of each slave core
+	 */
+	arm_arch_timer_set_compare(arm_arch_timer_count() + CYC_PER_TICK);
+	arm_arch_timer_enable(true);
+	irq_enable(ARM_ARCH_TIMER_IRQ);
+}
+#endif
