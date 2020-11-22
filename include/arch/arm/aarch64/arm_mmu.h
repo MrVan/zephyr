@@ -183,6 +183,7 @@ struct arm_mmu_config {
  */
 extern const struct arm_mmu_config mmu_config;
 
+int arm_mmu_init(const struct device *arg);
 #endif /* _ASMLANGUAGE */
 
 #endif /* ZEPHYR_INCLUDE_ARCH_ARM64_MMU_ARM_MMU_H_ */

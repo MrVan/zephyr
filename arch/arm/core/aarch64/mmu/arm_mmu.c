@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <cache.h>
 #include <device.h>
 #include <init.h>
 #include <kernel.h>
@@ -370,7 +371,7 @@ static void enable_mmu_el1(unsigned int flags)
  * This function provides the default configuration mechanism for the Memory
  * Management Unit (MMU).
  */
-static int arm_mmu_init(const struct device *arg)
+int arm_mmu_init(const struct device *arg)
 {
 	uint64_t val;
 	unsigned int idx, flags = 0;
@@ -391,7 +392,8 @@ static int arm_mmu_init(const struct device *arg)
 	for (idx = 0; idx < CONFIG_MAX_XLAT_TABLES; idx++)
 		MMU_DEBUG("%d: %p\n", idx, (uint64_t *)(xlat_tables + idx));
 
-	setup_page_tables();
+	if (!MPIDR_TO_CORE(GET_MPIDR()))
+		setup_page_tables();
 
 	/* currently only EL1 is supported */
 	enable_mmu_el1(flags);
