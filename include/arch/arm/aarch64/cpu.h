@@ -28,6 +28,10 @@
 				BIT(22) | BIT(18) | BIT(16) | \
 				BIT(11) | BIT(5) | BIT(4))
 
+#define SCTLR_EL2_RES1		(BIT(29) | BIT(28) | BIT(23) | \
+				BIT(22) | BIT(18) | BIT(16) | \
+				BIT(11) | BIT(5) | BIT(4))
+
 #define SCTLR_EL1_RES1		(BIT(29) | BIT(28) | BIT(23) | \
 				BIT(22) | BIT(20) | BIT(11))
 #define SCTLR_M			BIT(0)
@@ -43,6 +47,13 @@
 #define SCR_EL3_FIQ		BIT(2)
 #define SCR_EL3_EA		BIT(3)
 #define SCR_EL3_RW		BIT(10)
+
+/* HCR_EL2 */
+#define HCR_ATA			BIT(56)
+#define HCR_API			BIT(41)
+#define HCR_APK			BIT(40)
+#define HCR_RW_SHIFT		31
+#define HCR_RW			BIT(HCR_RW_SHIFT)
 
 /*
  * TODO: ACTLR is of class implementation defined. All core implementations

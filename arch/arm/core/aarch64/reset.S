@@ -115,8 +115,31 @@ SECTION_SUBSEC_FUNC(TEXT,_reset_section,__start)
 	eret
 
 2:
-	/* Booting from EL2 is not supported */
-	b	.
+	mov_imm	x1, SCTLR_EL2_RES1
+	mrs     x0, sctlr_el2
+	orr	x0, x0, x1
+	msr	sctlr_el2, x0
+	isb
+
+	mov_imm x0, (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
+	msr	hcr_el2, x0
+	isb
+
+	mrs	x0, cnthctl_el2
+	orr	x0, x0, #3
+	msr	cnthctl_el2, x0
+
+	msr	cntvoff_el2, xzr
+
+	mov	x0, xzr
+	orr	x0, x0, #(DAIF_MASK)
+	orr	x0, x0, #(SPSR_EL3_TO_EL1)
+	orr	x0, x0, #(SPSR_EL3_h)
+	msr	spsr_el2, x0
+
+	adr	x0, 1f
+	msr	elr_el2, x0
+	eret
 
 1:
 	/* Initialize VBAR */
