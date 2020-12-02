@@ -185,6 +185,13 @@ static inline int z_impl_sys_icache_range(void *addr, size_t size, int op)
 	return -ENOTSUP;
 }
 
+#ifdef CONFIG_LIBMETAL
+static inline void sys_cache_flush(void *addr, size_t size)
+{
+	sys_dcache_range(addr, size,  K_CACHE_FLUSH);
+}
+#endif
+
 /**
  *
  * @brief Get the d-cache line size.
