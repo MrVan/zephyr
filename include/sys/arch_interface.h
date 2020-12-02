@@ -819,19 +819,75 @@ void arch_gdb_step(void);
 #ifdef CONFIG_CACHE_MANAGEMENT
 /**
  *
- * @brief Flush d-cache lines to main memory
+ * @brief Enable d-cache
  *
- * @see sys_cache_flush
+ * @see arch_dcache_enable
  */
-void arch_dcache_flush(void *addr, size_t size);
+void arch_dcache_enable(void);
 
 /**
  *
- * @brief Invalidate d-cache lines
+ * @brief Disable d-cache
  *
- * @see sys_cache_invd
+ * @see arch_dcache_disable
  */
-void arch_dcache_invd(void *addr, size_t size);
+void arch_dcache_disable(void);
+
+/**
+ *
+ * @brief Enable i-cache
+ *
+ * @see arch_icache_enable
+ */
+void arch_icache_enable(void);
+
+/**
+ *
+ * @brief Enable i-cache
+ *
+ * @see arch_dcache_disable
+ */
+void arch_dcache_disable(void);
+
+/**
+ *
+ * @brief Flush / Invalidate / Clean one level d-cache
+ *
+ * @see arch_dcache_level
+ */
+int arch_dcache_level(int level, int op);
+
+/**
+ *
+ * @brief Flush / Invalidate / Clean all d-cache
+ *
+ * @see arch_dcache_all
+ */
+int arch_dcache_all(int op);
+
+/**
+ *
+ * @brief Flush / Invalidate / Clean d-cache lines
+ *
+ * @see arch_dcache_range
+ */
+int arch_dcache_range(void *addr, size_t size, int op);
+
+/**
+ *
+ * @brief Flush / Invalidate / Clean all i-cache
+ *
+ * @see arch_icache_all
+ */
+int arch_icache_all(int op);
+
+/**
+ *
+ * @brief Flush / Invalidate / Clean i-cache lines
+ *
+ * @see arch_icache_range
+ */
+int arch_icache_range(void *addr, size_t size, int op);
 
 #ifndef CONFIG_CACHE_LINE_SIZE
 /**
