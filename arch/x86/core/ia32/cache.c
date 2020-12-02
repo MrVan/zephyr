@@ -57,7 +57,7 @@ size_t sys_cache_line_size;
  * @return N/A
  */
 
-void arch_dcache_flush(void *start_addr, size_t size)
+static void arch_dcache_flush(void *start_addr, size_t size)
 {
 	uintptr_t start = (uintptr_t)start_addr;
 	uintptr_t end;
@@ -70,6 +70,16 @@ void arch_dcache_flush(void *start_addr, size_t size)
 	}
 
 	__asm__ volatile("mfence;\n\t");
+}
+
+int arch_dcache_range(void *addr, size_t size, int op)
+{
+	if (op & K_CACHE_FLUSH) {
+		arch_dcache_flush(addr, size);
+		return 0;
+	}
+
+	return -ENOTSUP;
 }
 
 #endif /* CONFIG_CLFLUSH_INSTRUCTION_SUPPORTED || CLFLUSH_DETECT */
