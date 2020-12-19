@@ -1,0 +1,5 @@
+tests:
+  arch.arm64.psci:
+    arch_allow: arm
+    tags: arm psci
+    filter: CONFIG_ARM_PSCI
